@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMOVI · Validación de permisos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f3f5f7 0%, #eaeef2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0,20,40,0.15), 0 8px 12px -6px rgba(0,0,0,0.02);
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 180px;
+            height: auto;
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .gov-path {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 0.2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1e3a5f;
+            background: #f0f4fa;
+            padding: 0.7rem 1.4rem;
+            border-radius: 100px;
+            border: 1px solid #ccd9e2;
+        }
+
+        .gov-path span {
+            color: #2c5f7e;
+            font-weight: 600;
+        }
+
+        .separator {
+            color: #7b98aa;
+            margin: 0 0.15rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #dbe3ea;
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.8rem;
+            gap: 0.8rem;
+        }
+
+        .nav-item {
+            color: #0b3b4b;
+            font-size: 1.05rem;
+            font-weight: 550;
+            text-decoration: none;
+            padding: 0.25rem 0;
+            border-bottom: 3px solid transparent;
+            transition: 0.1s ease;
+        }
+
+        .nav-item:hover {
+            border-bottom-color: #1c5a4b;
+            color: #0e3a30;
+        }
+
+        .hero-image-container {
+            width: 100%;
+            margin: 1.8rem 0 2rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #eef3f7;
+            border: 1px solid #d0dfe6;
+            aspect-ratio: 16/9;
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .title-container {
+            background-color: #1c5a4b;
+            padding: 0.7rem 1.2rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            width: auto;
+            min-width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: white;
+            text-align: center;
+        }
+
+        .folio-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f4e5f;
+            display: block;
+            margin-bottom: 0.6rem;
+            margin-left: 0.2rem;
+        }
+
+        .consultar-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-folio {
+            flex: 1 1 240px;
+            padding: 0.9rem 1.4rem;
+            font-size: 1.1rem;
+            border: 2px solid #b7ccd6;
+            border-radius: 60px;
+            outline: none;
+            background: white;
+            transition: 0.2s;
+            color: #0b2e3a;
+        }
+
+        .input-folio:focus {
+            border-color: #1c5a4b;
+            box-shadow: 0 0 0 4px rgba(28, 90, 75, 0.1);
+        }
+
+        .btn-consultar {
+            background: #1c5a4b;
+            color: white;
+            border: none;
+            padding: 0.9rem 2.4rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 14px rgba(28, 90, 75, 0.25);
+        }
+
+        .btn-consultar:hover {
+            background: #0e3a30;
+            transform: scale(0.98);
+        }
+
+        .footer-image-container {
+            width: 100%;
+            margin-top: 2rem;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f0f4fa;
+            border: 1px solid #d0dfe6;
+        }
+
+        .footer-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gov-footer {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #34626c;
+            border-top: 1px solid #cbd8e0;
+            padding-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .cdmx-badge {
+            background: #e7edf1;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #0a4455;
+        }
+
+        /* MODAL - VENTANA EMERGENTE */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 30px auto;
+            padding: 0;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.8rem;
+            background: #1c5a4b;
+            border-radius: 24px 24px 0 0;
+            color: white;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.2);
+        }
+
+        .permiso-body {
+            padding: 2rem;
+        }
+
+        /* ESTILOS DEL PERMISO - IGUAL AL DOCUMENTO OFICIAL */
+        .permiso-documento {
+            font-family: 'Courier New', 'Times New Roman', monospace;
+            background: white;
+            border: 2px solid #1c5a4b;
+            padding: 1.8rem;
+            border-radius: 16px;
+        }
+
+        .permiso-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 1rem;
+        }
+
+        .permiso-folio {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+
+        .permiso-titulo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #1c5a4b;
+            margin: 0.5rem 0;
+        }
+
+        .permiso-subtitulo {
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .permiso-aviso {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .permiso-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .permiso-campo {
+            border-bottom: 1px solid #ddd;
+            padding: 0.5rem 0;
+        }
+
+        .campo-etiqueta {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .campo-valor {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-top: 0.2rem;
+        }
+
+        .permiso-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ccc;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #666;
+        }
+
+        .firma-area {
+            margin-top: 1.5rem;
+            text-align: center;
+            border-top: 1px dashed #ccc;
+            padding-top: 1rem;
+        }
+
+        .qr-area {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+
+        @media (max-width: 600px) {
+            .permiso-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                margin: 15px auto;
+                width: 95%;
+            }
+            .permiso-body {
+                padding: 1rem;
+            }
+            .section-title {
+                font-size: 1.2rem;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="top-header">
+            <div class="logo-container">
+                <div class="logo-img">
+                    <img src="https://laliteradice.com/wp-content/uploads/2025/01/imagen-2-edited.png" alt="Ciudad de México - Capital de la Transformación">
+                </div>
+            </div>
+            <div class="gov-path">
+                <span>CDMX</span> 
+                <span class="separator">/</span> 
+                Secretarías 
+                <span class="separator">/</span> 
+                <span style="font-weight: 700; color: #003b6a;">SEMOVI</span>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="nav-item">Transparencia</a>
+            <a href="#" class="nav-item">Atención Ciudadana</a>
+            <a href="#" class="nav-item">Trámites y Servicios</a>
+        </div>
+
+        <div class="hero-image-container">
+            <img src="https://static.wixstatic.com/media/3afe45_a7718ae1ab564181afd928c80ef0ee1d~mv2.jpeg" alt="Nueva Licencia Permanente - Preguntas Frecuentes">
+        </div>
+
+        <div class="title-container">
+            <h1 class="section-title">Validación de permisos en línea</h1>
+        </div>
+
+        <div style="margin-bottom: 0.8rem;">
+            <label class="folio-label" for="folio">Ingrese el folio del permiso</label>
+            <div class="consultar-group">
+                <input type="text" id="folio" class="input-folio" placeholder="Ej. 1223131, C-3958, PERM-A123" autocomplete="off">
+                <button class="btn-consultar" onclick="buscarFolio()">Consultar</button>
+            </div>
+        </div>
+
+        <div class="footer-image-container">
+            <img src="https://www.metropolitanos.cdmx.gob.mx/themes/base/assets/images/AtencionCiudadana-negro.png" alt="Atención Ciudadana - Información de contacto">
+        </div>
+
+        <div class="gov-footer">
+            <span>Gobierno de la Ciudad de México</span>
+            <span class="cdmx-badge">SEMOVI · Movilidad</span>
+        </div>
+    </div>
+
+    <!-- MODAL / VENTANA EMERGENTE -->
+    <div id="permisoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📄 PERMISO PARA CIRCULAR</h2>
+                <button class="close-modal" onclick="cerrarModal()">&times;</button>
+            </div>
+            <div class="permiso-body" id="permisoBody">
+                <!-- Aquí se llenará el contenido del permiso -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // BASE DE DATOS SIMULADA - Basada en el PDF proporcionado
+        const permisosDB = [
+            {
+                folio: '1223131',
+                fechaEmision: '18 de mayo del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/022026',
+                marca: 'CHIREY',
+                linea: 'TIGGO 7 PRO',
+                modelo: '2023',
+                serie: 'LVVDB21B3PD717539',
+                motor: 'SIN NÚMERO',
+                vigencia: '17/06/2026',
+                propietario: 'ALBERTO ALMERALLA SOSA',
+                oficina: 'MÓDULO MÓVIL DE CONTROL VEHICULAR Nº 20',
+                pagoReferencia: 'LVDB21B3PD717539',
+                pagoMonto: '$374',
+                pagoFecha: '18/05/2026',
+                pagoTarjeta: '**********5458',
+                lineaCaptura: '50073384791955N560DX',
+                certificacion: 'vOS0vYAJ3G/qGTu9Fr85Og'
+            },
+            {
+                folio: '773906',
+                fechaEmision: '07 de marzo del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/012345',
+                marca: 'ITALIKA',
+                linea: 'AT125',
+                modelo: '2023',
+                serie: '3SCK69MC4P1014574',
+                motor: 'LC1P54FMIVQ505258',
+                vigencia: '07/04/2026',
+                propietario: 'ANDRES HERNÁNDEZ SEGURA',
+                oficina: 'MÓDULO DE CONTROL VEHICULAR Nº 5',
+                pagoReferencia: '3SCK69MC4P1014574',
+                pagoMonto: '$374',
+                pagoFecha: '07/03/2026',
+                pagoTarjeta: '**********1234',
+                lineaCaptura: '50073384791955N123AB',
+                certificacion: 'aBcDeFgHiJkLmNoPqRsTuV'
+            },
+            {
+                folio: 'C-3958',
+                fechaEmision: '13 de febrero del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/067890',
+                marca: 'CHEVROLET',
+                linea: 'CAPTIVA SUV C',
+                modelo: '2025',
+                serie: 'LZWLLNGL8SB008904',
+                motor: 'HECHO EN CHINA',
+                vigencia: '13/03/2026',
+                propietario: 'MARIEL LUVIANO AGUIRRE',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 12',
+                pagoReferencia: 'LZWLLNGL8SB008904',
+                pagoMonto: '$374',
+                pagoFecha: '13/02/2026',
+                pagoTarjeta: '**********9876',
+                lineaCaptura: '50073384791955N456CD',
+                certificacion: 'XyZwVuTsRqPoNm LkJiHg'
+            },
+            {
+                folio: '6903497',
+                fechaEmision: '18 de mayo del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/089123',
+                marca: 'KTM',
+                linea: 'DUKE 200',
+                modelo: '2024',
+                serie: 'VBKJPC40XRN076075',
+                motor: 'R93609656',
+                vigencia: '18/06/2026',
+                propietario: 'EDILBERTO HERNANDEZ',
+                oficina: 'MÓDULO DE CONTROL VEHICULAR Nº 8',
+                pagoReferencia: 'VBKJPC40XRN076075',
+                pagoMonto: '$374',
+                pagoFecha: '18/05/2026',
+                pagoTarjeta: '**********3321',
+                lineaCaptura: '50073384791955N789EF',
+                certificacion: 'AsDfGhJkLzXcVbNmQwErTy'
+            },
+            {
+                folio: '248038',
+                fechaEmision: '01 de mayo del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/045678',
+                marca: 'ITALIKA',
+                linea: 'RC250',
+                modelo: '2026',
+                serie: '3SCK3PJG2T1001935',
+                motor: 'LC166FMM111918E5',
+                vigencia: '01/06/2026',
+                propietario: 'ERICK MARTINEZ CASTILLO',
+                oficina: 'MÓDULO MOVIL Nº 3',
+                pagoReferencia: '3SCK3PJG2T1001935',
+                pagoMonto: '$374',
+                pagoFecha: '01/05/2026',
+                pagoTarjeta: '**********7777',
+                lineaCaptura: '50073384791955N999GH',
+                certificacion: 'PoIuYtReWqAsDfGhJkLzXc'
+            },
+            {
+                folio: 'PERM-A123',
+                fechaEmision: '15 de junio del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/999001',
+                marca: 'YAMAHA',
+                linea: 'FZ-25',
+                modelo: '2025',
+                serie: 'YAM12345FZ25ABC',
+                motor: 'YAM250ABC12345',
+                vigencia: '15/07/2026',
+                propietario: 'JORGE ALBERTO REYES',
+                oficina: 'MÓDULO DE CONTROL VEHICULAR Nº 15',
+                pagoReferencia: 'YAM12345FZ25ABC',
+                pagoMonto: '$374',
+                pagoFecha: '15/06/2026',
+                pagoTarjeta: '**********4444',
+                lineaCaptura: '50073384791955N555IJ',
+                certificacion: 'MkLoIjNhUgYfTdReWqQaZ'
+            },
+            {
+                folio: 'LIC-B789',
+                fechaEmision: '20 de julio del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/888002',
+                marca: 'SUZUKI',
+                linea: 'GIXXER 250',
+                modelo: '2024',
+                serie: 'SUZ67890GIX250D',
+                motor: 'SUZ250XYZ98765',
+                vigencia: '20/08/2026',
+                propietario: 'MARIA FERNANDA GOMEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '20/07/2026',
+                pagoTarjeta: '**********2222',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-7492',
+                fechaEmision: '25 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-7492',
+                marca: 'KAWASAKI',
+                linea: 'ZX6R',
+                modelo: '2025',
+                serie: 'JKBZJJ18SA020208',
+                motor: 'S/N',
+                vigencia: '25/06/2026',
+                propietario: 'ELITE ERICK VILLANUEVA GARCIA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '25/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: 'C-9201',
+                fechaEmision: '26 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-9201',
+                marca: 'BAJAJ',
+                linea: 'PULSAR N250',
+                modelo: '2026',
+                serie: 'MD2B97FX6TCK85943',
+                motor: 'PDXCTK90564',
+                vigencia: '26/06/2026',
+                propietario: 'JONATHAN LOPEZ SANCHEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '25/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-0284',
+                fechaEmision: '27 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-0284',
+                marca: 'ITALIKA',
+                linea: 'DM200',
+                modelo: '2026',
+                serie: '3SCK4FKHOT1025696',
+                motor: 'ZS167FML5T138875',
+                vigencia: '27/06/2026',
+                propietario: 'EDGARDO RUBEN GIL GUADA RRAMA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '27/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: '019472',
+                fechaEmision: '23 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/019472',
+                marca: 'CHEVROLET',
+                linea: 'SILVERADO',
+                modelo: '2013',
+                serie: '3GCPKSE7XDG340395',
+                motor: '131854533',
+                vigencia: '23/06/2026',
+                propietario: 'GIVER ROBLERO RAMIREZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '23/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-0782',
+                fechaEmision: '01 De Junio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/c-0782',
+                marca: 'VOLKSWAGEN',
+                linea: 'POINTER',
+                modelo: '2000',
+                serie: '9BWA37327YT078745',
+                motor: 'UDH040858',
+                vigencia: '01/07/2026',
+                propietario: 'OSCAR ZEPEDA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '23/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-8493',
+                fechaEmision: '02 De Junio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/c-8493',
+                marca: 'KAWASAKI',
+                linea: 'ZX10R',
+                modelo: '2024',
+                serie: 'JKBZXVM11RA007569',
+                motor: 'HECHO EN USA',
+                vigencia: '02/07/2026',
+                propietario: 'JORGE RAMIREZ SÁNCHEZ ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '02/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-0382',
+                fechaEmision: '28 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/c-0382',
+                marca: 'CHEVROLET',
+                linea: 'EXPRESS PAS VAN',
+                modelo: '2017',
+                serie: '1GAZG9FG8H1340667',
+                motor: 'HECHO EN USA',
+                vigencia: '28/06/2026',
+                propietario: 'UBALDO PEREZ MARTÍNEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '28/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: 'C-2910',
+                fechaEmision: '31 De Mayo Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/c-2910',
+                marca: 'CHEVROLET',
+                linea: 'SUBURBAN LT4',
+                modelo: '2013',
+                serie: '1GNSK8E72DR107812',
+                motor: 'S/N',
+                vigencia: '31/06/2026',
+                propietario: 'UBALDO PEREZ MARTÍNEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '31/05/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-4758',
+                fechaEmision: '10 De Junio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-4758',
+                marca: 'CHEVROLET',
+                linea: 'ONIX LS',
+                modelo: '2021',
+                serie: '1G1MA5E25ML110730',
+                motor: 'S/N',
+                vigencia: '10/07/2026',
+                propietario: 'ALEJANDRO ALVAREZ AGUAYO',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '10/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: 'C-2920',
+                fechaEmision: '09 De Junio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-2920',
+                marca: 'DODGE',
+                linea: 'GRAND CARAVAN',
+                modelo: '1996',
+                serie: '2B4GP4439TRT66389',
+                motor: 'HECHO EN USA',
+                vigencia: '09/07/2026',
+                propietario: 'GABRIEL ESCOBEDO MUÑOZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '09/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'F-0392',
+                fechaEmision: '17 De Junio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/F-0392',
+                marca: 'HYUNDAI',
+                linea: 'VELOSTER',
+                modelo: '2012',
+                serie: 'KMHTC6AD9CU043530',
+                motor: 'S/N',
+                vigencia: '17/07/2026',
+                propietario: 'DIEGO ANTONIO JUVERA GARCIA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '17/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'C-058194',
+                fechaEmision: '10 De JuLio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/C-058194',
+                marca: 'DODGE',
+                linea: 'CHALLENGER',
+                modelo: '2017',
+                serie: '2C3CDZFJ7HH594491',
+                motor: 'HECHO EN USA',
+                vigencia: '10/07/2026',
+                propietario: 'ENRIQUE JAVIER VILLANUEVA JACQUES',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '10/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'V-050094',
+                fechaEmision: '22 De JuLio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/V-050094',
+                marca: 'ITALIKA',
+                linea: 'RC200',
+                modelo: '2026',
+                serie: '3SCK3GJC0T1008234',
+                motor: 'LC163FML298358E5',
+                vigencia: '22/08/2026',
+                propietario: 'ERICK MARTINEZ CASTILLO',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '22/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: 'V-947391',
+                fechaEmision: '28 De JuLio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/V-947391',
+                marca: 'HONDA',
+                linea: 'PILOT',
+                modelo: '2021',
+                serie: '5FNYF5H61MB012561',
+                motor: 'HECHO EN USA',
+                vigencia: '22/08/2026',
+                propietario: 'MARTHA IMELDA NUÑEZ NUÑEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '28/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'B-069485',
+                fechaEmision: '29 De JuLio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/B-069485',
+                marca: 'VOLKSWAGEN',
+                linea: 'VENTO',
+                modelo: '2018',
+                serie: 'MEX532604JT063299',
+                motor: 'CLS608588',
+                vigencia: '29/08/2026',
+                propietario: 'EMILIANO SANCHEZ MORALES',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '29/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+             {
+                folio: 'B-079583',
+                fechaEmision: '30 De JuLio Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/B-079583',
+                marca: 'FORD',
+                linea: 'FIGO',
+                modelo: '2016',
+                serie: 'MAJFP1MD3GA106977',
+                motor: 'S/N',
+                vigencia: '30/08/2026',
+                propietario: 'JOSE EDUARDO ESCOBEDO DELGADILLO',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '30/06/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'E-394765',
+                fechaEmision: '03 De Agosto Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/E-394765',
+                marca: 'SUBARU',
+                linea: 'TRIBECA',
+                modelo: '2008',
+                serie: '4S4WX93D084410290',
+                motor: 'HECHO EN USA',
+                vigencia: '03/09/2026',
+                propietario: 'JUAN MARTÍN HERMOSILLO GALLEGOS',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '03/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'Q-869292',
+                fechaEmision: '03 De Agosto Del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/Q-869292',
+                marca: 'VENTO',
+                linea: 'TERRA S 170 DS',
+                modelo: '2026',
+                serie: '3MUEBPBE8T1038308',
+                motor: 'WYTB034827',
+                vigencia: '03/09/2026',
+                propietario: 'OSCAR DAVID CERVANTES TAPIA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '03/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'D-529727',
+                fechaEmision: '04 de Agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/D-529727',
+                marca: 'CHEVROLET',
+                linea: 'TAHOE SUBURBAN',
+                modelo: '2007',
+                serie: '1GNFC13J37R128726',
+                motor: 'HECHO EN USA',
+                vigencia: '04/09/2026',
+                propietario: 'MARLÉN GONZÁLEZ JIMÉNEZ ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '04/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'X-787027',
+                fechaEmision: '08 de agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/X-787027',
+                marca: 'Volkswagen',
+                linea: 'Derby',
+                modelo: '2004',
+                serie: 'BAWJC0RE04A656900',
+                motor: 'AD0274789',
+                vigencia: '06/09/2026',
+                propietario: 'Edeer Giogan Segundo Merlin ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '08/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'A-544567',
+                fechaEmision: '08 de Agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/A-544567',
+                marca: 'ITALIKA',
+                linea: '250 Z',
+                modelo: '2020',
+                serie: 'LLCLPMB09LA102661',
+                motor: 'LC166FMMSQ391588',
+                vigencia: '08/09/2026',
+                propietario: 'JAZMIN ANDREA CABRERA GAYTÁN ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '08/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'D-324898',
+                fechaEmision: '12 de Agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/D-324898',
+                marca: 'ITALIKA',
+                linea: 'ZR250',
+                modelo: '2018',
+                serie: '3SCMZRHE3J1005478',
+                motor: 'LC166FMMRQ192784',
+                vigencia: '12/09/2026',
+                propietario: 'LUIS DANIEL HERNÁNDEZ LIRA',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '12/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'R-749103',
+                fechaEmision: '20 de Agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/R-749103',
+                marca: 'GAC',
+                linea: 'GL RACER',
+                modelo: '2025',
+                serie: 'LMGHT1L82S3172298',
+                motor: 'EXTRANJERO',
+                vigencia: '20/09/2026',
+                propietario: 'SANTIAGO ZAVALA FELIX',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '20/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'O-359969',
+                fechaEmision: '22 de agosto del 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/O-359969',
+                marca: 'ITALIKA ',
+                linea: 'FT 250',
+                modelo: '2023',
+                serie: '35CK2FEX6P1002213',
+                motor: 'RW166FMM2300002458',
+                vigencia: '20/09/2026',
+                propietario: 'JUAN ANTONIO LOPEZ TELLEZ ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '22/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'K-106390',
+                fechaEmision: '23 de agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/K-106390',
+                marca: 'KIA ',
+                linea: 'FORTE',
+                modelo: '2020',
+                serie: '3KPF54AD9LE114501',
+                motor: 'G4NHKE466172',
+                vigencia: '22/09/2026',
+                propietario: 'ADILIA VIRIDIANA ESTRADA DIAZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '23/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'V-064844',
+                fechaEmision: '23 de agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/V-064844',
+                marca: 'CHEVROLET',
+                linea: 'SPARK',
+                modelo: '2015',
+                serie: 'KL8CM6CD8FC724540',
+                motor: 'HECHO EN KOREA',
+                vigencia: '22/09/2026',
+                propietario: 'BRANDON RAUL SOTO VELAZCO',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '23/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            },
+            {
+                folio: 'V-652835',
+                fechaEmision: '26 de Agosto de 2026',
+                oficioNum: 'STV/DGST/CDMX/D0/V-652835',
+                marca: 'TOYOTA',
+                linea: 'HILUX DOBLE CABINA SR',
+                modelo: '2022',
+                serie: 'MR0CX3DD7N1331619',
+                motor: '2TRA969667',
+                vigencia: '24/09/2026',
+                propietario: 'GERARDO MATIAS RIVERA SANCHEZ',
+                oficina: 'MÓDULO MOVIL DE CONTROL VEHICULAR Nº 7',
+                pagoReferencia: 'SUZ67890GIX250D',
+                pagoMonto: '$374',
+                pagoFecha: '26/08/2026',
+                pagoTarjeta: '**********8721',
+                lineaCaptura: '50073384791955N777KL',
+                certificacion: 'QsEfRtGyHuJmIkOlPñLk'
+            }
+            
+        ];
+
+        function generarHTMLPermiso(permiso) {
+            return `
+                <div class="permiso-documento">
+                    <div class="permiso-header">
+                        <div style="font-size:0.8rem; font-weight:bold;">2026 año de Margarita Maza</div>
+                        <div class="permiso-folio">FOLIO: ${permiso.folio} | Ciudad de México a ${permiso.fechaEmision} | OFICIO Nº ${permiso.oficioNum}</div>
+                        <div class="permiso-titulo">PERMISO PARA CIRCULAR SIN PLACAS, TARJETA DE CIRCULACIÓN Y ENGOMADO</div>
+                        <div class="permiso-subtitulo">ESTE DOCUMENTO SOLO ES VALIDO EN ORIGINAL Y EN SU FORMATO DIGITAL – SECRETARIA DE MOVILIDAD DE LA CIUDAD DE MÉXICO</div>
+                    </div>
+
+                    <div class="permiso-grid">
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">MARCA</div>
+                            <div class="campo-valor">${permiso.marca}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">LÍNEA</div>
+                            <div class="campo-valor">${permiso.linea}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">MODELO</div>
+                            <div class="campo-valor">${permiso.modelo}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">SERIE</div>
+                            <div class="campo-valor">${permiso.serie}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">MOTOR</div>
+                            <div class="campo-valor">${permiso.motor}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">VIGENCIA</div>
+                            <div class="campo-valor">${permiso.vigencia}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">PROPIETARIO</div>
+                            <div class="campo-valor">${permiso.propietario}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">OFICINA EXPEDIDORA</div>
+                            <div class="campo-valor">${permiso.oficina}</div>
+                        </div>
+                    </div>
+
+                    <div class="permiso-aviso">
+                        ⚠️ EL PRESENTE DOCUMENTO SOLO ES VALIDO EN ORIGINAL Y/O FORMATO DIGITAL Y TIENE UNA VIGENCIA DE 30 DÍAS, A PARTIR DE SU FECHA DE EMISIÓN
+                    </div>
+
+                    <div class="firma-area">
+                        <div>ATENTAMENTE</div>
+                        <div style="margin-top: 1rem; font-weight:bold;">Lic. Héctor Alejandro García Nieto</div>
+                        <div>SECRETARIO DE MOVILIDAD DE LA CIUDAD DE MEXICO</div>
+                        <div style="font-size:0.7rem; margin-top:0.5rem;">Álvaro Obregón 260 Piso 3 Col. Roma Delegación Cuauhtémoc CP. 06700</div>
+                        <div style="font-size:0.7rem;">Tel. 5552099913 Ext. 1460</div>
+                    </div>
+
+                    <div class="qr-area">
+                        <div>📱 VALIDACIÓN DATA MATRIX - USO EXCLUSIVO SEMOVI</div>
+                        <div style="margin-top:0.5rem; font-size:0.65rem;">CAPITAL DE LA TRANSFORMACIÓN | www.semovi.cdmx.gob.mx</div>
+                        <div style="margin-top:0.5rem; font-weight:bold;">OPCIÓN DE VERIFICAR PERMISO EN EL SITIO</div>
+                        <div style="font-size:0.65rem;">DOCUMENTO VALIDO EN FORMATO DIGITAL | VALIDO EN TODA LA REPUBLICA MEXICANA</div>
+                    </div>
+
+                    <div class="permiso-footer">
+                        <strong>RECIBO DE PAGO A LA TESORERÍA</strong><br>
+                        IMPUESTO POR DERECHO DE AUTOMOVIL Y MOTOCICLETAS (PERMISO PARA CIRCULAR 30 DÍAS)
+                    </div>
+
+                    <div class="permiso-grid" style="margin-top:1rem;">
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">REFERENCIA</div>
+                            <div class="campo-valor">${permiso.pagoReferencia}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">MONTO PAGADO</div>
+                            <div class="campo-valor">${permiso.pagoMonto}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">FECHA DE PAGO</div>
+                            <div class="campo-valor">${permiso.pagoFecha}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">TARJETA</div>
+                            <div class="campo-valor">${permiso.pagoTarjeta}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">LÍNEA DE CAPTURA</div>
+                            <div class="campo-valor" style="font-size:0.85rem; word-break:break-all;">${permiso.lineaCaptura}</div>
+                        </div>
+                        <div class="permiso-campo">
+                            <div class="campo-etiqueta">CERTIFICACIÓN DIGITAL</div>
+                            <div class="campo-valor" style="font-size:0.75rem; word-break:break-all;">${permiso.certificacion}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buscarFolio() {
+            const input = document.getElementById('folio');
+            let folio = input.value.trim();
+            
+            if (folio.length === 0) {
+                alert('⚠️ Por favor ingrese un folio para consultar');
+                return;
+            }
+            
+            // Búsqueda exacta (insensible a mayúsculas/minúsculas)
+            const permiso = permisosDB.find(p => p.folio.toLowerCase() === folio.toLowerCase());
+            
+            if (permiso) {
+                // Generar el contenido del permiso y mostrarlo en el modal
+                const permisoBody = document.getElementById('permisoBody');
+                permisoBody.innerHTML = generarHTMLPermiso(permiso);
+                
+                // Mostrar el modal
+                const modal = document.getElementById('permisoModal');
+                modal.style.display = 'block';
+                
+                // Prevenir scroll del body cuando el modal está abierto
+                document.body.style.overflow = 'hidden';
+            } else {
+                alert(`❌ Folio "${folio}" no encontrado en la base de datos`);
+            }
+        }
+
+        function cerrarModal() {
+            const modal = document.getElementById('permisoModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Permitir búsqueda con tecla Enter
+        document.getElementById('folio').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarFolio();
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function(event) {
+            const modal = document.getElementById('permisoModal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        }
+
+        // Enfocar el input al cargar
+        window.onload = function() {
+            document.getElementById('folio').focus();
+        };
+    </script>
+</body>
+</html>
